@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Interactivo TDD: AuthService</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="status-panel" id="statusPanel">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-icon">🔵</span>
+                <span class="status-text">LISTO PARA EMPEZAR</span>
+            </div>
+            <div class="status-description" id="statusDescription">
+                ¡Bienvenido! Vamos a construir una clase AuthService usando TDD. Haz clic en 'Siguiente Paso' para escribir nuestro primer test.
+            </div>
+        </div>
+
+        <div class="code-panels">
+            <div class="code-panel">
+                <div class="code-header">
+                    <span class="file-icon">📄</span>
+                    <span class="file-name">test_auth_service.py</span>
+                </div>
+                <pre><code id="testCode" class="language-python"></code></pre>
+            </div>
+
+            <div class="code-panel">
+                <div class="code-header">
+                    <span class="file-icon">📄</span>
+                    <span class="file-name">auth_service.py</span>
+                </div>
+                <pre><code id="sourceCode" class="language-python"></code></pre>
+            </div>
+        </div>
+
+        <div class="console-panel">
+            <div class="console-header">
+                <span class="console-icon">💻</span>
+                <span>Consola (pytest)</span>
+            </div>
+            <pre id="consoleOutput" class="console-output"></pre>
+        </div>
+
+    </div>
+
+    <!-- Controles de navegación fijos en los laterales -->
+    <button id="prevButton" class="nav-btn nav-btn-left" disabled>
+        <span class="nav-arrow">←</span>
+    </button>
+    
+    <button id="nextButton" class="nav-btn nav-btn-right">
+        <span class="nav-arrow">→</span>
+    </button>
+    
+    <div class="step-indicator-fixed">
+        <span>Paso <span id="currentStep">0</span> de <span id="totalSteps">0</span></span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
