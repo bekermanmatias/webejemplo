@@ -84,6 +84,39 @@ test_auth_service.py::test_register_new_user PASSED                          [10
     },
     {
         step: 3,
+        state: 'blue',
+        stateText: 'REFACTORIZAR',
+        icon: '🔵',
+        description: 'CICLO 1 - PASO 1.3 (REFACTOR 🔵): El test pasa. Ahora refactorizamos: convertimos self.users en atributo privado (self._users) por convención. El test sigue pasando.',
+        testCode: `import pytest
+from auth_service import AuthService
+
+def test_register_new_user():
+    service = AuthService()
+    result = service.register("usuario1", "password123")
+    assert result == True`,
+        sourceCode: `class AuthService:
+    def __init__(self):
+        self._users = {}  # Atributo privado por convención
+    
+    def register(self, username, password):
+        self._users[username] = password
+        return True`,
+        consoleOutput: `$ pytest test_auth_service.py -v
+
+================================ test session starts ================================
+platform win32 -- Python 3.x.x, pytest-7.4.3, pluggy-1.3.0
+collected 1 item
+
+test_auth_service.py::test_register_new_user PASSED                          [100%]
+
+================================ 1 passed in 0.xxs ===============================
+
+Refactorización exitosa: Atributo privado aplicado sin romper tests.`,
+        consoleClass: 'success'
+    },
+    {
+        step: 4,
         state: 'red',
         stateText: 'ROJO',
         icon: '🔴',
@@ -103,10 +136,10 @@ def test_register_existing_user():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        self.users[username] = password
+        self._users[username] = password
         return True`,
         consoleOutput: `$ pytest test_auth_service.py -v
 
@@ -126,7 +159,7 @@ AssertionError: assert True == False
         consoleClass: 'error'
     },
     {
-        step: 4,
+        step: 5,
         state: 'green',
         stateText: 'VERDE',
         icon: '🟢',
@@ -146,12 +179,12 @@ def test_register_existing_user():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True`,
         consoleOutput: `$ pytest test_auth_service.py -v
 
@@ -166,7 +199,7 @@ test_auth_service.py::test_register_existing_user PASSED                     [ 5
         consoleClass: 'success'
     },
     {
-        step: 5,
+        step: 6,
         state: 'red',
         stateText: 'ROJO',
         icon: '🔴',
@@ -192,12 +225,12 @@ def test_login_success():
     assert result == True`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True`,
         consoleOutput: `$ pytest test_auth_service.py -v
 
@@ -218,7 +251,7 @@ AttributeError: 'AuthService' object has no attribute 'login'
         consoleClass: 'error'
     },
     {
-        step: 6,
+        step: 7,
         state: 'green',
         stateText: 'VERDE',
         icon: '🟢',
@@ -244,16 +277,16 @@ def test_login_success():
     assert result == True`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True`,
         consoleOutput: `$ pytest test_auth_service.py -v
 
@@ -269,7 +302,7 @@ test_auth_service.py::test_login_success PASSED                              [ 3
         consoleClass: 'success'
     },
     {
-        step: 7,
+        step: 8,
         state: 'red',
         stateText: 'ROJO',
         icon: '🔴',
@@ -301,16 +334,16 @@ def test_login_wrong_password():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True`,
         consoleOutput: `$ pytest test_auth_service.py -v
 
@@ -332,7 +365,7 @@ AssertionError: assert None == False
         consoleClass: 'error'
     },
     {
-        step: 8,
+        step: 9,
         state: 'green',
         stateText: 'VERDE',
         icon: '🟢',
@@ -364,16 +397,16 @@ def test_login_wrong_password():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True
         else:
             return False`,
@@ -392,7 +425,7 @@ test_auth_service.py::test_login_wrong_password PASSED                       [ 2
         consoleClass: 'success'
     },
     {
-        step: 9,
+        step: 10,
         state: 'red',
         stateText: 'ROJO',
         icon: '🔴',
@@ -429,16 +462,16 @@ def test_login_user_not_found():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True
         else:
             return False`,
@@ -463,7 +496,7 @@ KeyError: 'usuario_inexistente'
         consoleClass: 'error'
     },
     {
-        step: 10,
+        step: 11,
         state: 'green',
         stateText: 'VERDE',
         icon: '🟢',
@@ -500,18 +533,18 @@ def test_login_user_not_found():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if username not in self.users:
+        if username not in self._users:
             return False
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True
         else:
             return False`,
@@ -531,7 +564,7 @@ test_auth_service.py::test_login_user_not_found PASSED                       [ 2
         consoleClass: 'success'
     },
     {
-        step: 11,
+        step: 12,
         state: 'blue',
         stateText: 'REFACTORIZAR',
         icon: '🔵',
@@ -568,18 +601,18 @@ def test_login_user_not_found():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self.users = {}
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
-        if username in self.users:
+        if username in self._users:
             return False
-        self.users[username] = password
+        self._users[username] = password
         return True
     
     def login(self, username, password):
-        if username not in self.users:
+        if username not in self._users:
             return False
-        if self.users[username] == password:
+        if self._users[username] == password:
             return True
         else:
             return False`,
@@ -601,11 +634,11 @@ Código listo para refactorizar...`,
         consoleClass: 'success'
     },
     {
-        step: 12,
+        step: 13,
         state: 'blue',
         stateText: 'REFACTORIZADO',
         icon: '✅',
-        description: '¡REFACTORIZACIÓN COMPLETA! Mejoras aplicadas: 1) self.users → self._users (atributo privado por convención), 2) Uso de .get() para acceso seguro al diccionario, 3) Simplificación del return en login(). Todos los tests siguen pasando.',
+        description: '¡REFACTORIZACIÓN COMPLETA! Mejoras aplicadas: Uso de .get() para acceso seguro al diccionario, y simplificación del return en login(). Todos los tests siguen pasando.',
         testCode: `import pytest
 from auth_service import AuthService
 
@@ -638,7 +671,7 @@ def test_login_user_not_found():
     assert result == False`,
         sourceCode: `class AuthService:
     def __init__(self):
-        self._users = {}  # Atributo privado (convención)
+        self._users = {}  # Atributo privado por convención
     
     def register(self, username, password):
         if username in self._users:
@@ -745,6 +778,52 @@ document.addEventListener('DOMContentLoaded', function() {
             prevStep();
         }
     });
+    
+    // Soporte táctil para móviles (gestos de deslizamiento)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    const container = document.querySelector('.container');
+    
+    container.addEventListener('touchstart', function(event) {
+        touchStartX = event.changedTouches[0].screenX;
+        touchStartY = event.changedTouches[0].screenY;
+    }, { passive: true });
+    
+    container.addEventListener('touchend', function(event) {
+        touchEndX = event.changedTouches[0].screenX;
+        touchEndY = event.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50; // Distancia mínima para considerar swipe
+        const swipeDistanceX = touchEndX - touchStartX;
+        const swipeDistanceY = touchEndY - touchStartY;
+        
+        // Solo activar si el movimiento horizontal es mayor que el vertical
+        if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
+            if (swipeDistanceX > swipeThreshold) {
+                // Swipe derecha -> paso anterior
+                prevStep();
+            } else if (swipeDistanceX < -swipeThreshold) {
+                // Swipe izquierda -> paso siguiente
+                nextStep();
+            }
+        }
+    }
+    
+    // Prevenir zoom en doble tap en iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
     
     // Inicializar con el primer paso
     updateStep(0);
